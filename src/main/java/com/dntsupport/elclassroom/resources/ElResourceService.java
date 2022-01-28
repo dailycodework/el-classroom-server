@@ -52,4 +52,10 @@ public class ElResourceService {
     public Stream<ElResource> getAllFiles() {
         return repository.findAll().stream();
     }
+
+
+
+    public void deleteById(String id) {
+       repository.deleteById(id);
+    }
 }

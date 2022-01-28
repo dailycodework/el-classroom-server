@@ -5,6 +5,7 @@ import com.dntsupport.elclassroom.message.ResponseMessage;
 import com.dntsupport.elclassroom.resources.properties.Category;
 import com.dntsupport.elclassroom.resources.properties.Topic;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +33,10 @@ public class ElResourceController {
         String message = "";
         try {
             resourceService.create(topic, grade,category,data, description);
-            message = "Uploaded the file successfully: " + data.getOriginalFilename();
+            message = "Uploaded successfully: " + data.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
-            message = "Could not upload the file: " + data.getOriginalFilename() + "!";
+            message = "Could not upload file: " + data.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
@@ -74,21 +75,24 @@ public class ElResourceController {
                     fileDownloadUri,
                     res.getType(),
                     res.getData().length);
-
     }
 
-
-
-
-
-
-
-  /*  @GetMapping("/{id}")
+    @GetMapping("download/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable String id) {
         ElResource resource = resourceService.getFile(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"" + resource.getName() + "\"")
                 .body(resource.getData());
-    }*/
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") String id) {
+        try {
+            resourceService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

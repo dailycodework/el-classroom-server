@@ -1,4 +1,4 @@
-package com.dntsupport.elclassroom.util;
+package com.dntsupport.elclassroom.registration;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

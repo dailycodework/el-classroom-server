@@ -1,11 +1,11 @@
 package com.dntsupport.elclassroom.registration;
 
+
+import com.dntsupport.elclassroom.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+
 
 
 @AllArgsConstructor
@@ -14,10 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegistrationController {
 
     private final RegistrationService  registrationService;
+    private ConfirmationTokenService tokenService;
 
     @PostMapping
     public String register(@RequestBody Registration user){
         return registrationService.register(user);
     }
 
+    @GetMapping("/confirm-email")
+    public String confirm(@RequestParam String token){
+        return registrationService.confirmRegistration(token);
+    }
 }

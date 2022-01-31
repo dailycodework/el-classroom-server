@@ -35,10 +35,11 @@ public class ElUser {
    @JsonIgnore
     private List<ElResource> resources;
 
-    public ElUser(String firstName, String lastName, String email, String password) {
+    public ElUser(String firstName, String lastName, String email, String password, UserRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 }

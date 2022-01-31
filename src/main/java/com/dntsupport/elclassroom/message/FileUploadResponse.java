@@ -4,7 +4,7 @@ import com.dntsupport.elclassroom.resources.properties.Topic;
 import lombok.Data;
 
 @Data
-public class ResponseFile {
+public class FileUploadResponse {
   private String name;
   private Topic topic;
   private String grade;
@@ -12,7 +12,7 @@ public class ResponseFile {
   private String type;
   private long size;
 
-  public ResponseFile(String name, Topic topic, String grade, String url, String type, long size) {
+  public FileUploadResponse(String name, Topic topic, String grade, String url, String type, long size) {
     this.name = name;
     this.topic = topic;
     this.grade = grade;

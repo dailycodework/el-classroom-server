@@ -1,6 +1,6 @@
 package com.dntsupport.elclassroom.resources;
 
-import com.dntsupport.elclassroom.message.ResponseFile;
+import com.dntsupport.elclassroom.message.FileUploadResponse;
 import com.dntsupport.elclassroom.message.ResponseMessage;
 import com.dntsupport.elclassroom.resources.properties.Category;
 import com.dntsupport.elclassroom.resources.properties.Topic;
@@ -42,14 +42,14 @@ public class ElResourceController {
     }
 
     @GetMapping("/all-resources")
-    public ResponseEntity<List<ResponseFile>> getListFiles() {
-        List<ResponseFile> resources = resourceService.getAllFiles().map(res -> {
+    public ResponseEntity<List<FileUploadResponse>> getListFiles() {
+        List<FileUploadResponse> resources = resourceService.getAllFiles().map(res -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/uploaded/resources/")
                     .path(String.valueOf(res.getId()))
                     .toUriString();
-            return new ResponseFile(
+            return new FileUploadResponse(
                     res.getName(),
                     res.getTopic(),
                     res.getGrade(),
@@ -61,14 +61,14 @@ public class ElResourceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseFile getFileById(@PathVariable("id") String id) {
+    public FileUploadResponse getFileById(@PathVariable("id") String id) {
 
         ElResource res = resourceService.getFile(id);
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/uploaded/resources/")
                     .path(String.valueOf(((ElResource) res).getId())).toUriString();
-            return new ResponseFile(
+            return new FileUploadResponse(
                     res.getName(),
                     res.getTopic(),
                     res.getGrade(),

@@ -7,13 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -21,7 +16,7 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
-public class ElUser implements UserDetails {
+public class ElUser {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(generator = "uuid")
@@ -36,7 +31,7 @@ public class ElUser implements UserDetails {
     private UserRole role;
     private boolean isEnabled = false;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonIgnore
     private List<ElResource> resources;
 
@@ -45,41 +40,5 @@ public class ElUser implements UserDetails {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
-        return Collections.singletonList(authority);
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email ;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return isEnabled;
     }
 }

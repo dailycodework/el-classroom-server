@@ -18,4 +18,9 @@ public interface ElUserRepository extends JpaRepository<ElUser, String> {
     @Modifying
     @Query("UPDATE ElUser el SET el.isEnabled = TRUE WHERE el.email = ?1")
     int enableUser(String email);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE ElUser el SET el.isEnabled = FALSE WHERE el.email = ?1")
+    int disableUser(String email);
 }

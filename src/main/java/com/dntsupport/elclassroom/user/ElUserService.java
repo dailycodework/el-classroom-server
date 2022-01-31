@@ -5,15 +5,16 @@ import com.dntsupport.elclassroom.message.UserMessage;
 import com.dntsupport.elclassroom.registration.token.ConfirmationToken;
 import com.dntsupport.elclassroom.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -25,8 +26,9 @@ public class ElUserService  implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return elUserRepository.findByEmail(email)
+        ElUser elUser = elUserRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(UserMessage.USER_NOT_FOUND, email)));
+        return new ElUserSecurity(elUser);
     }
     public String signUpUser(ElUser user){
         // check if the email provided by the user is already taken
@@ -55,4 +57,27 @@ public class ElUserService  implements UserDetailsService {
     public int enableUser(String email) {
         return elUserRepository.enableUser(email);
     }
+
+    public Stream<ElUser> getUsers() {
+     return elUserRepository.findAll().stream();
+    }
+
+    public ElUser getUser(String email) {
+        return elUserRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(String.format(UserMessage.USER_NOT_FOUND, email)));
+    }
+
+    public int disableUser(String email) {
+        return elUserRepository.disableUser(email);
+    }
+
+    @Transactional
+    public void deleteUser(String email){
+        var theUser = this.getUser(email);
+        tokenService.deleteUserToken(theUser);
+        elUserRepository.delete(theUser);
+
+    }
+
 }
